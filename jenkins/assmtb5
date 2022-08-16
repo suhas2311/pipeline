@@ -1,5 +1,5 @@
-boolean testPassed = true
 pipeline {
+boolean testPassed = true
   agent any
    stages {
     stage ('BUILD') {
