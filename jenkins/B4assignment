@@ -1,22 +1,20 @@
 pipeline {
   agent any
   parameters {
-    choice(choices: ['BUILD'], description: 'Select the stage you want to run', name: 'Stage_build')
-    choice(choices: ['DEPLOY'], description: 'Select the stage you want to run', name: 'Stage_deploy')
-    choice(choices: ['TEST'], description: 'Select the stage you want to run', name: 'Stage_test')
+    choice(choices: ['BUILD', 'DEPLOY', 'TEST'], description: 'Select the stage you want to run', name: 'Stage')
  }
   stages {
-      stage ('params.Stage_build') {
+      stage ('params.Stage') {
         steps {
           echo 'this is build stage'
         }
       }  
-      stage ('params.Stage_deploy') {
+      stage ('params.Stage') {
         steps {
         echo 'this is deploy stage'
         }
       }
-      stage ('params.Stage_test') {
+      stage ('params.Stage') {
         steps {
         echo 'this is test'
         }
