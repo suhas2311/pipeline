@@ -3,10 +3,8 @@ pipeline {
    stages {
     stage ('BUILD') {
       steps {
-        try{
           sh 'echo 'buid is success' '
           boolean testPassed = true
-        }
         catch (Error){
           testPassed = false
         }
