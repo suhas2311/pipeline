@@ -5,7 +5,7 @@ pipeline {
       steps {
         catchError(testPassed = 'false'){
           sh ' echo "buid is success" '
-          testPassed = 'true'
+          boolean testPassed = true
         }
     }
   }
