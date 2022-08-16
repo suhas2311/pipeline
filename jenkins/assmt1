@@ -15,17 +15,13 @@ pipeline {
                 }
               } 
         stage ('Test1') {
-            when {
-                params.branch =='Master'
-            }
+            when { params.branch =='Master' }
             steps {
                 echo "this is test1 stage"   
             }
         }
         stage ('Test2') {
-            when {
-                params.branch =='Master'
-            }
+            when { params.branch =='Master' }
             steps {
                 echo "this is test2 stage"
             }
