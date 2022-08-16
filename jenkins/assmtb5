@@ -4,7 +4,7 @@ pipeline {
     stage ('BUILD') {
       steps {
         catchError(testPassed = false){
-          sh 'echo 'buid is success' '
+          sh 'echo'buid is success' '
           boolean testPassed = true
         }
     }
@@ -14,7 +14,7 @@ pipeline {
          expression { testPassed == 'true' }
         }
             steps {
-                  echo 'this is deplo'
+                  echo 'this is deploy'
                 }
               }
        stage ('TEST') {
