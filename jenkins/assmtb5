@@ -1,0 +1,34 @@
+pipeline {
+  agent any
+   stages {
+    stage ('BUILD') {
+      steps {
+        try{
+          sh 'echo 'buid is success' '
+          boolean testPassed = true
+        }
+        catch (Error){
+          testPassed = false
+        }
+    }
+  }
+    stage ('DEPLOY') {
+        when {
+         expression { testPassed == 'true' }
+        }
+            steps {
+                  echo 'this is deplo'
+                }
+              }
+       stage ('TEST') {
+        when {
+         expression { testPassed == 'false' }
+        }
+            steps {
+                  echo 'this is test'
+                }
+              }
+      } 
+    }
+
+    
