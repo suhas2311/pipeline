@@ -3,33 +3,34 @@ pipeline {
   parameters {
     choice(choices: ['BUILD', 'DEPLOY', 'TEST'], description: 'Select the stage you want to run', name: 'running_stage')
   }
-  
-      script {
-        if(params.running_stage == 'BUILD')
-        {
-        stages {
-          stage ('BUILD') {
-            steps {
+   stages {
+    stage ('BUILD') {
+      steps {
+        script {
+          if(params.running_stage == 'BUILD')
+          {
             echo 'this is build stage'
             }
           }  
-        } 
-        if(params.running_stage == 'DEPLOY')
-        {
+        }
           stage ('DEPLOY') {
             steps {
-              echo 'this is deploy stage'
-            }
-          } 
-        }
-        if(params.running_stage == 'TEST')
-        {
+              script {
+                if(params.running_stage == 'DEPLOY')
+                {
+                  echo 'this is deploy stage'
+                }
+              } 
+          }
           stage ('TEST') {
             steps {
-              echo 'this is test'
+              script {
+                if(params.running_stage == 'BUILD')
+                {
+                  echo 'this is test'
+                }
+              }
             }
-          }
-        }
       } 
     }
   }
