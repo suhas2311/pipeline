@@ -7,7 +7,7 @@ pipeline {
         script{
           try{
             echo " this is build stage" 
-            sh 'exit 0'  
+            sh 'exit 1'  
           }
           catch(Exception e){testPassed=false}
        }
