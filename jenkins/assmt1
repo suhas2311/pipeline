@@ -1,7 +1,6 @@
 pipeline {
     agent any
-    stages {
-      parameters {
+     parameters {
     choice(choices: ['Master', 'Main'], description: 'Select the branch you want to run', name: 'branch')
   }
    stages {
