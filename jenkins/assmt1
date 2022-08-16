@@ -28,9 +28,7 @@ pipeline {
                 params.branch =='Master'
             }
             steps {
-                sh'''
                 echo "this is test2 stage"
-                '''
             }
         }
        
