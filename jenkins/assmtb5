@@ -6,9 +6,13 @@ pipeline {
       steps {
         script{
           try{
-            echo " this is build stage"   
-  }
-}
+            echo " this is build stage" 
+            sh 'exit 1'  
+          }
+          catch(Exception e){testPassed=false}
+       }
+      }
+    }  
     stage ('DEPLOY') {
         when {
          expression {testPassed == 'true' }
