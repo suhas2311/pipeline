@@ -13,6 +13,7 @@ pipeline {
             }
           }  
         }
+      }
           stage ('DEPLOY') {
             steps {
               script {
@@ -22,7 +23,8 @@ pipeline {
                 }
               } 
           }
-          stage ('TEST') {
+       }
+       stage ('TEST') {
             steps {
               script {
                 if(params.running_stage == 'BUILD')
@@ -31,6 +33,7 @@ pipeline {
                 }
               }
             }
+          }
       } 
     }
   }
