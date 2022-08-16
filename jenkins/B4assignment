@@ -27,7 +27,7 @@ pipeline {
        stage ('TEST') {
             steps {
               script {
-                if(params.running_stage == 'BUILD')
+                if(params.running_stage == 'TEST')
                 {
                   echo 'this is test'
                 }
