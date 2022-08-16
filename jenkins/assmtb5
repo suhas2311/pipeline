@@ -6,8 +6,7 @@ pipeline {
       steps {
         script{
           try{
-            echo " this is build stage" 
-            sh 'exit 1'  
+            echo " this is build stage"  
           }
           catch(Exception e){testPassed=false}
        }
