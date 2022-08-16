@@ -4,13 +4,13 @@ pipeline {
    stages {
     stage ('BUILD') {
       steps {
-        catchError(testPassed = true)
+        catchError( boolean testPassed = true)
         echo " this is buiild stage"   
   }
 }
     stage ('DEPLOY') {
         when {
-         expression {testPassed == 'true' }
+         expression {boolean testPassed == 'true' }
         }
             steps {
                   echo 'this is deploy'
@@ -18,7 +18,7 @@ pipeline {
               }
        stage ('TEST') {
         when {
-         expression {testPassed == 'true' }
+         expression {boolean testPassed == 'true' }
         }
             steps {
                   echo 'this is test'
