@@ -23,7 +23,7 @@ pipeline {
               }
        stage ('TEST') {
         when {
-         expression {testPassed == 'true' }
+         expression {testPassed == 'false' }
         }
             steps {
                   echo 'this is test'
