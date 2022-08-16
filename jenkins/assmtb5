@@ -8,6 +8,7 @@ pipeline {
         catchError
         testPassed = false
   }
+}
     stage ('DEPLOY') {
         when {
          expression { testPassed == 'true' }
