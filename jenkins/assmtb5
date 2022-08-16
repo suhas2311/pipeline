@@ -4,8 +4,8 @@ pipeline {
    stages {
     stage ('BUILD') {
       steps {
-        echo " this is build "
         catchError(testPassed = true)
+        echo " this is buiild stage"   
   }
 }
     stage ('DEPLOY') {
