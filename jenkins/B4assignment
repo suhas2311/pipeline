@@ -1,7 +1,7 @@
 pipeline {
   agent any
-  options([parameters([choice(choices: ['BUILD', 'DEPLOY', 'TEST'], description: 'Select the stage you want to run', name: 'Stage')])]) {
-    stages {
+  options([parameters([choice(choices: ['BUILD', 'DEPLOY', 'TEST'], description: 'Select the stage you want to run', name: 'Stage')])]) 
+  stages {
       stage ('BUILD') {
         steps {
           echo 'this is build stage'
@@ -19,5 +19,5 @@ pipeline {
      }
     } 
   }
-  }
+
     
