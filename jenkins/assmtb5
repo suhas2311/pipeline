@@ -6,7 +6,7 @@ pipeline {
       steps {
         script{
           try{
-            echo " this is buiild stage"   
+            echo " this is build stage"   
   }
 }
     stage ('DEPLOY') {
