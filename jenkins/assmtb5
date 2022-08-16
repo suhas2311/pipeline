@@ -15,7 +15,7 @@ pipeline {
     }  
     stage ('DEPLOY') {
         when {
-         expression {testPassed == 'true' }
+         expression {testPassed == true }
         }
             steps {
                   echo 'this is deploy'
@@ -23,7 +23,7 @@ pipeline {
               }
        stage ('TEST') {
         when {
-         expression {testPassed == 'false' }
+         expression {testPassed == false }
         }
             steps {
                   echo 'this is test'
