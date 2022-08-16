@@ -5,9 +5,8 @@ pipeline {
     stage ('BUILD') {
       steps {
         echo " this is build "
-        catch (Exception e){
+        catch (Exception e)
         testPassed = false
-    }
   }
     stage ('DEPLOY') {
         when {
