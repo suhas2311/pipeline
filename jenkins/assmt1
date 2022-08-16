@@ -31,5 +31,5 @@ pipeline {
                 echo "this is test2 stage"
             }
         }
-       
+      } 
     }  
