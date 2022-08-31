@@ -251,6 +251,8 @@ CMD and ENTRYPOINT
 IQ: What is the difference b/w CMD and ENTRYPOINT
     What is the difference b/w COPY and ADD 	
     What is the difference b/w ENV and ARG
+    What is the difference b/w EXPOSE and publish
+	
 
     Try to learn source command
 
@@ -307,20 +309,18 @@ Docker Volumes
 			docker volume rm <volume_name>
 
 
-
-
 Multistage build 
-	How to optimize docker build process ?
-	How to reduce the size of the docker image or cotainer ? 
+	How to optimise docker build process ?
+	How to reduce the size of the docker image or container ? 
 
 	After docker 1.6 version docker released this option.
 	1. There are 2 problems with the normal build process 
 			1. Size: challenge is to keep the image and its containers size as minimal as  		
 			   possible.
-			2. larger the surface area more the application is vurnalable to attacks. 
+			2. larger the surface area more the application is vulnerable to attacks. 
 	
 		- Multistage build allows us to define multiple FROM in same Dockerfile.
-		- Dependency between multile FROM is maintained by naming FROM using 
+		- Dependency between multiple FROM is maintained by naming FROM using 
 		  AS keyword and we can refer this name in another FROM.
 
 				FROM <base_image> AS <STAGE_NAME>
@@ -348,6 +348,9 @@ Docker maven direct run example
 	To build the war file with test phase skipped
 		docker run -it --rm -v $(pwd)/libraries:/root/.m2 -w /app -v "$(pwd)":/app maven mvn clean package -Dmaven.test.skip=true
 	
+	To create a custom network of type bridge 
+		docker network create --driver bridge maven
+
 	To run a test sever for Integration test 
 		docker run -it -d --rm -v maven_repo:/root/.m2 \
     			-v "$(pwd)":/app -w /app \
@@ -390,5 +393,86 @@ Docker networking
 			-p 8080-8085:8086-8091
 			 - The total number of host ports in range should be same as the 
 			   total number of container ports range.
-				
+
+	EXPOSE 
+		EXPOSE <port_number>
+		- Used to expose a port to the docker network 
+		- This is make the  port accessible by all the other containers in the 
+		  same docker network.	 
+
+
+Docker network types 
+	1. Bridge 
+		- This is a private internal network created by docker on the host machine 
+		  by name docker0	
+		- This is the default network type for all the container which are created 
+          without any network configurations.
+		- By default all the containers in the same bridge can communicate with 
+		  each other without any extra configuration.	
+		- We cannot use container name for communication only IP address is allowed in 
+		  default bridge.
+
+		Custom bridge 
+			To create bridge network 
+				docker network create --driver bridge my_bride 
+			
+			- In custom bridge containers can communicate with eachother with container 
+			  name and also with IP address.
+			
+	2. Host 		  
+		- This driver removes the network isolation between docker and the host.
+		- The containers are directly connected to host machine network without  
+		  extra layer of any docker network.
+		- Shares the same TCP.IP stack and same namespace of host machine.  
+		- All the network interfaces which are there in host machine are 
+		  accessible by this container.
+
+	3. None 
+		- Containers are not attached to any network by docker.
+		- All the required network configurations need to be done 
+		  manually.
+		- The host or any other containers won't be able to communicate 
+		  with this container until a custom network is configured.
+		  
+Docker Architecture 
+
+	Docker Daemon 
+		- A background process that manages docker images, containers, network and volumes.
+		- This Daemon constantly listens for docker API request and processes them.
+	
+	Docker REST API 
+		- API which is used by applications to interact with the docker daemon. 
+		
+	Docker CLI 
+		- It is a command line interface for interacting with docker daemon through
+		  REST api.
+	
+	Docker Objects 
+		- Images, Containers, Networks, Vloumes
+
+Benefits of Docker 
+
+	Flexible: 
+		Complex applications cab be divided and containerised in small competents called 
+		microservice. 
+	
+	Lightweight: 
+		Containers share the machine’s OS system kernel and therefore do not require 
+		an OS per application, driving higher server efficiencies and reducing server and licensing costs
+
+	portable: 
+		we can build images anywhere and then deploy to cloud, run anywhere.	
+
+States of container / Lifecycle of container 
+
+	1. Created - if container is newly created and container is not yet started.
+	2. Running - A currently running container. It means there is no problem 
+				 with container to run the process.
+	3. Exited - A container ran and completed of execution with failure.
+	4. paused - A container whose process have been paused. (we can unpause the container)
+	5. Dead - if docker daemon tried and failed to stop a container (host ram full)
+	6. Restarting - container will be in the phase of restarting the main process.
+	
+
+
 
