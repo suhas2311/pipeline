@@ -58,4 +58,37 @@ Kubernetes Installation
 	18. In master node check for the worker nodes.
 		kubectl get nodes 
 			
+			
+kubernetes Architecture 	
+	The architecture of k8s differs from master and worker node 
 
+	Master node components 
+		1. Api Server / kube-api-server
+			- It is the main managemnet point of the cluster and also called 
+			  as brain of the cluster.
+			- All the components are directly connected to API serve, they 
+			  communicate through API server only and no other component will 
+			  communicate directly with eachother.
+			- This is the only component which connects and got access to etcd.
+			- All the cluster requests are authenticated and authorized by API server.
+			- API server has a watch machanism for watching the changes in cluster.
+			
+		2. etcd 
+			- ectd is a distributed , consistent key value store used for 
+			  storing the complete cluster information/data.
+			- ectd contains data such as configuration managemnet of cluster,
+              distributed work and basically complete cluster information.			
+			
+		3. scheduler / kube-scheduler
+			- The scheduler always watches for a new pod request and 
+			  decides which worker node this pod should be created.
+			- Based on the worker node load, affinity and anti-affiny, taint configuration 
+			  pod will be scheduled to a particualr node.
+			  
+		Controller manager /control manager / kube-controller 
+			- It is a daemon that always runs and embeds core control loops known as controllers. 
+			- K8s has some inbuild controllers such as Deployment, DaemonSet, ReplicaSet, Replication controller,
+			  node controller, jobs, cronjob, endpoint controller, namespace controller etc.	
+			
+		Cloud controller manager 
+		
