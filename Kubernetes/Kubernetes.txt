@@ -282,3 +282,195 @@ Deployment controller / Deployment / k8s deployment
 	
 Assignment: demo on selectors types 
 		  
+	
+DaemonSet
+	- DaemonSet ensures that a copy of pod is always running on all the worker nodes in the cluster.
+	-If a new node is added or if deleted DaemonSet will automatically adds/deletes the pod.
+
+	usage: 
+		- we use DaemonSet to deploy monitoring agents in every worker node.
+		- Log collection daemons: to grab the logs from worker and all the pods running in it.
+		
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: nginx-daemonset
+spec:
+  selector:
+	matchLabels:
+	  app: daemonset-nginx
+  template:
+	metadata:
+	  labels:
+		app: daemonset-nginx
+	spec:
+	  containers:
+	  - name: nginx
+		image: nginx:1.14.2
+		ports:
+		 - containerPort: 80
+		 
+Statefull Applications 
+	- User session data is saved at the server side.
+	- if server goes down, it is difficult to transfer the session data to other server. 
+	- This type of application will not work, if we want to implement autoscaling.
+	
+Stateless Applications
+	- user session-data is never saved at the server side.
+	- using a common authentication gateway / client token method to validate the users 
+	  once for multiple microservices.	
+		
+https://medium.com/tech-tajawal/microservice-authentication-and-authorization-solutions-e0e5e74b248a		
+
+Monolothic and Microservice architecture 
+
+	Monolothic architecture
+		- A monolothic application has a single code base with multiple modules in it.
+		- It is a single build for entire application.
+		- To make minor changes to application, we need to re-build and re-deploy the 
+		  complete application.
+		- scaling is very challenging.
+			
+	Microservice architecture 
+		- A microservice application is composed of small (micro) services. 
+		- Each service will have a different code base.
+		- Application are divided into as small as possible sub applications called services
+		  which are independent to each other which are called loosely coupled.	
+		- Each service can be managed separately and it is deployable separately.
+		- Services need not to share same technology stack or frameworks.		 
+
+StatefulSet 
+	- StatefulSet = Deployment + sticky identity for each and every pod replica.
+	- Unlike a deployment a StatefulSet maintains a sticky identity for each of the pod.
+		
+Node controller 
+	- Looks for node statuses and responds to API server only when a node is down.
+
+Endpoint Controller
+	- Populates the information of endpoints of all the objects.	
+
+		
+Service (svc)
+	- Service is an REST api objects with set of policies for defining the 
+	  access to set of pods.
+	- Services are the default load balancer in k8s.
+	- services are always created and works at cluster level.
+	- services are the networking configurations which we do in k8s.
+	- k8s prefers to use 30000 - 50000 range of ports to define services.
+
+1. ClusterIP
+	- This is the default type of service which exposes the IPs of pod to the other pods 
+	  with in the same cluster.
+	- ClusterIP cannot be accessed outside cluster.
+	- services are the default loadbalancers of k8s.
+	
+	apiVersion: v1 
+	kind: Service 
+	metadata:
+	     name: my-svc 
+	spec: 
+		type: ClusterIP
+		selector: 
+			app: my-nginx 
+		ports: 
+			- name: http
+			  port: 30080
+			  targetPort: 8080	
+
+2. nodePort 
+	- A nodeport service is the most primitive way to get the external traffic directed to our services / applications 
+	  running inside a pod within the cluster.
+	- By default NodePort acts as a load balancer. 
+	- Automatically a ClusterIP will be created internally. 
+	
+		NodePort = ClusterIP + a port mapping to the all the nodes of cluster.
+		
+	- If we wont specify any port while creating nodeport, k8s will automatically asign a port between the range 30000 - 32767
+	- By default nodeport will open the port in all the node in cluster including master node.	
+	
+	apiVersion: v1 
+	kind: Service 
+	metadata:
+	     name: my-svc 
+	spec: 
+		type: NodePort
+		selector: 
+			app: my-nginx 
+		ports: 
+			- name: http
+			  nodePort:30082	
+			  port: 8080
+			  targetPort: 80
+
+		
+3. Load Balancer
+	- It is a type of service which is used to link external load balancer to the cluster.
+	- This type of service is used by cloud providers and this service is completely depends on cloud providers. 
+	- K8s now provides a better alternative for this service type which is called Ingress.
+
+
+4. Headless service 
+	headless service 
+		  - When we neither need nor want loadbalancig and when we don't want a single IP to a service, we need to use headless service.
+		  - Headless service returns all the ips of the pods it is selecting.
+		  - headless service is created by specifying none for clusterIP 
+		  - headless service is usually used with statefulsets.
+		  
+	headless with in cluster 
+
+		apiVersion: v1 
+		kind: Service 
+		metadata:
+			 name: my-svc 
+		spec: 
+			clusterIP: None
+			selector: 
+				app: my-nginx 
+			ports: 
+				- name: http
+				  port: 30080
+				  targetPort: 8080
+				  
+	headless with nodeport 			  
+		nodePort = headless + port mapping 
+		
+		apiVersion: v1 
+		kind: Service 
+		metadata:
+			 name: my-svc 
+		spec: 
+			clusterIP: None
+			type: NodePort
+			selector: 
+				app: my-nginx 
+			ports: 
+				- name: http
+				  nodePort:30082	
+				  port: 8080
+				  targetPort: 80
+				  
+	1. Create a headless service with statefulsets
+	2. Login to any one of pod 
+	3. apt install dnsutils and do nslookup <service_name>
+
+
+Assignment: 
+	
+A. How to use custom images / connect to a registry through k8s 
+	1. Login to the docker hub account 
+		  docker login 
+	2. Create a app to print ip 
+			using flask 
+	3. 	push the image to your registry 
+	4 use the above custom image in k8s spec file.
+	
+		image: <username>/<regirty_name>:<tag>
+		imagePullPolicy: IfNotPresent
+		
+	5. Create a service of type NodePort attaching the above pods 
+
+B. How to access application running on one pod from another pod 
+
+C. Demo in service to service communication
+
+D. Headless service example (Need to show the list of all pod ips) 
