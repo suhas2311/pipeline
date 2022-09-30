@@ -208,4 +208,79 @@ Modules
 Assignment: create s3 with versioning enabled and sse of default type.
 				- no value should be hard coded in the resource block.
 				- should print output - s3 buckate name and some 4 details
+
+
+Taint
+	- The terraform taint command is used to mark a terraform managed resoruce as tainted, which will 
+	  mark the resource to be destroyed and recreated in the new apply operation.
+	- Taint will not apply the tainted mark on the actual resoruce in the infrastructure but it will mark 
+	  as tainted in the state file.
+	- If we do terraform plan/apply it will show resources as tainted.
+
+	
+	To taint a resource
+		terraform taint <reasource_type>.<resource_name>
+		
+	To taint a module resource
+		terraform taint -module=<module_name> <reasource_type>.<resource_name>
+		
+		terraform taint <terra.arn>
+	
+	To list the resources 
+		terraform state list 
+		
+	To remove taint 
+		terraform untaint <reasource_type>.<resource_name>
+
+
+data sources / data resource 
+	- A data source is used to get the information dynamically of a resource from cloud provider.
+	- This resource is read-only and this will be executed every time we run the terraform code.
+	- We can query the information and get the required field of information using filters.
+		
+		data "aws_ami" "ubuntu" {
+			  most_recent = true
+
+			  filter {
+				name   = "name"
+				values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+			  }
+
+			  filter {
+				name   = "virtualization-type"
+				values = ["hvm"]
+			  }
+		}
+		
+		
+		resource "aws_instance" "example_ecc2" {
+			ami = data.aws_ami.ubuntu.id	
+			type = "t2.micro"
+		}
+		
+
+Terraform workspace 		
+	- workspace in terraform are a way to manage different set statefiles independently within different workspaces.
+	- In terraform every configuration that we do should be in a workspace by deafult it is 'default' workspace.
+	- Different workspace means completely seperate working directory or root module.
+	
+	To list workspace 
+		terraform workspace list
+		
+	To create workspace
+		terraform workspace new <workspace_name>
+		
+	To change workspace
+		terraform workspace select <workspace_name>
+		
+	To delete workspace 
+		terraform workspace delete <workspace_name>
+		
+	Advantages: 
+		- with workspace we can deploy tarraform scripts to different environments in same working directory.
+		- To maintain multiple different set of infrastructure resource with same cloud provider.
+		- We can isolate state files using workspace.
+
+
+
 				
