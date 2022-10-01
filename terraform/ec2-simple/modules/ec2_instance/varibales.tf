@@ -1,11 +1,11 @@
-variable "k8s_ami" {
+variable "ec2_ami" {
    default = ""
 }
 
-variable "k8s_instance_type" {
+variable "ec2_instance_type" {
    default = ""
 }
 
-# variable "k8s_name" {
-#    default = ""
-# }
+variable "ec2_pem" {
+   default = ""
+}

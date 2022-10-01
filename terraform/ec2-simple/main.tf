@@ -11,48 +11,26 @@ module "dynamodb_locking_create" {
    bill_mode = "PAY_PER_REQUEST"
 }
 
-data "aws_ami" "get_k8s_master_ami" {
-    most_recent = true
-    owners = ["639218562896"]
-    tags = {
-      Name = "k8s"
-    }
-
-    filter {
-      name = "state"
-      values = ["available"]
-    }
-
-    filter {
-      name = "tag:Name"
-      values = ["k8s"]
-    }
-}
-
-module "create_k8s_master_node" {
+module "ec2_create" {
     source = "./modules/ec2_instance"
-    k8s_ami = data.aws_ami.get_k8s_master_ami.image_id
-    k8s_instance_type = var.module_k8s_instance_type
+    ec2_ami = "ami-024c319d5d14b463e"
+    ec2_instance_type = "t2.micro"
+    ec2_pem = "devops-june-2022"
 }
 
+module "file_exec" {
+    source = "./modules/file"
+    ec2_user = "ubuntu"
+    ec2_public_ip = module.ec2_create.ec2_public_ip
+}
 
-# provider "" {
-  
-# }
+module "local_exec" {
+    source = "./modules/locl_exec"
+    ec2_public_ip = module.ec2_create.ec2_public_ip
+}
 
-# data "" "name" {
-  
-# }
-
-# resource "" "name" {
-  
-# }
-
-# variable "" {
-  
-# }
-
-# output "name" {
-  
-# }
-
+module "remote_exec" {
+    source = "./modules/remote_exec"
+    ec2_user = "ubuntu"
+    ec2_public_ip = module.ec2_create.ec2_public_ip
+}
